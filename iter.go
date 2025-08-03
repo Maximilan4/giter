@@ -48,6 +48,11 @@ func (i *Iter[V]) Reduce(start V, f func(acc V, v V) V) V {
 	return Reduce(i.seq, start, f)
 }
 
+// Length - counts a len of a seq
+func (i *Iter[V]) Length() int64 {
+	return Length(i.seq)
+}
+
 // Pull - return a pull iterator from existing seq
 func (i *Iter[V]) Pull() (next func() (V, bool), stop func()) {
 	return iter.Pull(i.seq)
@@ -61,8 +66,4 @@ func (i *Iter[V]) Seq() iter.Seq[V] {
 // Slice - collects a slice from seq
 func (i *Iter[V]) Slice() []V {
 	return slices.Collect(i.seq)
-}
-
-func (i *Iter[V]) Length() int64 {
-	return Length(i.seq)
 }
