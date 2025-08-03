@@ -18,7 +18,7 @@ type TestStruct struct {
 }
 
 func main() {
-	for field := range giter.MustFieldsFor[TestStruct](giter.WithNonExportedFields()) {
-		fmt.Println(field)
+	for field := range giter.MustStructFieldsFor[TestStruct](giter.WithNonExportedFields(), giter.WithRecursive()) {
+		fmt.Println(field.Name)
 	}
 }
