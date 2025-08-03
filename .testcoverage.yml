@@ -1,0 +1,16 @@
+profile: cover.out
+
+threshold:
+  file: 50
+  package: 50
+  total: 70
+
+exclude:
+  paths:
+    - examples
+
+breakdown-file-name: ''
+
+diff:
+  base-breakdown-file-name: ''
+  threshold: -1
