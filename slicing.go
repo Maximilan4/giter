@@ -4,6 +4,31 @@ import (
 	"iter"
 )
 
+// DropWhile2 - drop n pairs from iter.Seq2 until given f returns false
+func DropWhile2[WF func(K, V) bool, K, V any](seq iter.Seq2[K, V], f WF) iter.Seq2[K, V] {
+	if f == nil {
+		return seq
+	}
+	
+	return func(yield func(K, V) bool) {
+		var skip = true
+
+		for k, v := range seq {
+			if skip {
+				if f(k, v) {
+					continue
+				}
+				skip = false
+			}
+
+			if !yield(k, v) {
+				return
+			}
+		}
+	}
+}
+
+// Drop2 - drops n first pairs from iter.Seq2 and continues iteration
 func Drop2[K, V any](seq iter.Seq2[K, V], n int) iter.Seq2[K, V] {
 	if n < 1 {
 		return seq
@@ -22,6 +47,31 @@ func Drop2[K, V any](seq iter.Seq2[K, V], n int) iter.Seq2[K, V] {
 				return
 			}
 			i++
+		}
+	}
+}
+
+// DropWhile - drops n items from iter.Seq until given f return false
+func DropWhile[WF func(T) bool, T any](seq iter.Seq[T], f WF) iter.Seq[T] {
+	if f == nil {
+		return seq
+	}
+
+	return func(yield func(T) bool) {
+		var skip = true
+
+		for item := range seq {
+			if skip {
+				if f(item) {
+					continue
+				}
+
+				skip = false
+			}
+
+			if !yield(item) {
+				return
+			}
 		}
 	}
 }
