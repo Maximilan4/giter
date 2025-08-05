@@ -4,6 +4,51 @@ import (
 	"iter"
 )
 
+func Drop2[K, V any](seq iter.Seq2[K, V], n int) iter.Seq2[K, V] {
+	if n < 1 {
+		return seq
+	}
+
+	var i int
+
+	return func(yield func(K, V) bool) {
+		for k, v := range seq {
+			if i < n {
+				i++
+				continue
+			}
+
+			if !yield(k, v) {
+				return
+			}
+			i++
+		}
+	}
+}
+
+// Drop first n items from iter.Seq and continue iteration
+func Drop[T any](seq iter.Seq[T], n int) iter.Seq[T] {
+	if n < 1 {
+		return seq
+	}
+
+	var i int
+
+	return func(yield func(T) bool) {
+		for item := range seq {
+			if i < n {
+				i++
+				continue
+			}
+
+			if !yield(item) {
+				return
+			}
+			i++
+		}
+	}
+}
+
 // TakeWhile - take elements from iter.Seq, until given func returns true
 func TakeWhile[WF func(T) bool, T any](seq iter.Seq[T], f WF) iter.Seq[T] {
 	if f == nil {
